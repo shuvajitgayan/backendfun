@@ -10,7 +10,21 @@ dotenv.config(
         path:"./env"
     })
 
+
+const sarverPort = process.env.PORT || 8000;
 connectDb ()
+.then (() => {
+    app.on("error", (error) => {
+        console.log("error :",error)
+        throw error;
+    })
+    app.listen(sarverPort, () => {
+        console.log(`sarver is running on port ${sarverPort}`);
+    })
+})
+.catch ( (error) => {
+    console.log("MONGODB connection failed !!", error)
+})
 
 
 
