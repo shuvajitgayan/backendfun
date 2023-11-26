@@ -23,12 +23,12 @@ const userSchema = new Schema({
         trim:true,
         index:true
     },
-    avater:{
+    avatar:{
         type:String,
         required:true
     },
     coverImage:{
-        type:string
+        type:String
     },
     watchHistry:[
         {
@@ -59,7 +59,7 @@ userSchema.methods.generateAccesstoken = function(){
     return jwt.sign({
         _id:this._id,
         email:this.email,
-        uswename:this.username,
+        username:this.username,
         fullname:this.fullname
     },
     process.env.ACCESS_TOKEN_SECRET,

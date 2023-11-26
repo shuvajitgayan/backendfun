@@ -2,7 +2,7 @@ import { apiError } from "../utils/apiError.js";
 import {asyincHandelar} from "../utils/asyinsHandelar.js"
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinaryFileUplode.js";
-import { apiREsponce } from "../utils/apiResponce.js";
+import { apiResponce } from "../utils/apiResponce.js";
 
 const userRegister = asyincHandelar( async (req,res) => {
     const {username,email,fullname,avater,coverImage,password} = req.body
@@ -15,7 +15,7 @@ const userRegister = asyincHandelar( async (req,res) => {
     ) {
         throw new apiError(400,"all filds are required")
     }
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [ { username },{ email } ]
     })
     if (existedUser) {
@@ -30,14 +30,14 @@ const userRegister = asyincHandelar( async (req,res) => {
     const avtar = await uploadOnCloudinary(avtaralocalapath)
     const coverPhoto = await uploadOnCloudinary(coverImageLocalPath)
 
-    if (!avater) {
+    if (!avtar) {
         throw new apiError (400,"avtar file is required")
     }
 
     const user = await User.create({
         fullname,
-        avtar:avtar.url,
-        coverImage:coverImage?.url || "",
+        avatar:avtar.url,
+        coverImage:coverPhoto?.url || "",
         email,
         password,
         username: username.toLowerCase()
@@ -51,7 +51,7 @@ const userRegister = asyincHandelar( async (req,res) => {
     }
 
     return res.status(201).json(
-        new apiREsponce(200, createdUser, "user registered succesfully")
+        new apiResponce(200, createdUser, "user registered succesfully")
     )
 
 })
