@@ -25,7 +25,11 @@ const userRegister = asyincHandelar( async (req,res) => {
     if (!avtaralocalapath) {
         throw new apiError (400,"avtar file is required")
     }
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path
+    let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path
+    } 
 
     const avtar = await uploadOnCloudinary(avtaralocalapath)
     const coverPhoto = await uploadOnCloudinary(coverImageLocalPath)
